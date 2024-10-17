@@ -27,6 +27,8 @@ const orderRoutes = require('./routes/orderRoutes');
 const countryRoute = require('./routes/countryRoute');
 const bannerRoutes = require('./routes/homeBannerImageRoute');
 const aboutRoute = require('./routes/aboutRoute');
+const transactionRoutes = require('./routes/transactionRoutes');
+
 // const errorMiddleware = require('./middleware/errorMiddleware')
 const path = require('path');
 const fs = require('fs');
@@ -78,6 +80,7 @@ app.use('/api', emailTemplateRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/country', countryRoute);
 app.use('/api/banner', bannerRoutes);
+app.use('/api', transactionRoutes);
 //app.use('/uploads/uploadDocuments', express.static(path.join(__dirname, 'uploads/uploadDocuments')));
 //Response handler Middleware
 

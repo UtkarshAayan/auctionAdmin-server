@@ -140,7 +140,7 @@ const registerSubadmin = async (req, res, next) => {
     })
     await newUser.save();
     //return res.status(200).send("User Registered Successfully")
-    return next(createSuccess(200, "Seller Registered Successfully"))
+    return next(createSuccess(200, "Subadmin Registered Successfully"))
   }
   catch (error) {
     //return res.status(500).send("Something went wrong")
