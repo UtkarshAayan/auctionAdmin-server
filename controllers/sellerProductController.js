@@ -7,149 +7,150 @@ const path = require('path');
 const fs = require('fs');
 //to Create user 
 const createProduct = async (req, res, next) => {
-    try {
-        const role = await Role.find({ role: 'Seller' });
+  try {
+    const role = await Role.find({ role: 'Seller' });
 
-        const {
-            productName,
-            category,
-            color,
-            productCondition,
-            productDescription,
-            subcategory,
-            lotNumber,
-            brand,
-            startingPrice,
-            reservePrice,
-            saleTax,
-            startDate,
-            endDate,
-            buyerPremium,
-            shipping,
-            collect,
-            startTime,
-            stopTime,
-            address,
-            town,
-            country,
-            minimumIncrementAmount,
-            currentBid
-        } = req.body;
-        if (!req.files || req.files.length === 0) {
-            return next(createError(400, "No files uploaded"))
-        }
-     
-        const uploadDocuments = req.files.map(file => {
-            const filename = Date.now() + path.extname(file.originalname);
-            const filepath = path.join(__dirname, '../uploads', filename);
-
-            fs.writeFileSync(filepath, file.buffer); // Save the file to the filesystem
-
-            return {
-                filename,
-                contentType: file.mimetype
-            };
-        });
-        const newProduct = new Product({
-            productName,
-            category,
-            color,
-            productCondition,
-            productDescription,
-            subcategory,
-            lotNumber,
-            brand,
-            startingPrice,
-            currentBid,
-            reservePrice,
-            saleTax,
-            startDate,
-            endDate,
-            buyerPremium,
-            shipping,
-            collect,
-            startTime,
-            stopTime,
-            address,
-            town,
-            country,
-            minimumIncrementAmount,
-            uploadDocuments,
-            proVerifyByAdmin: false,
-            isActive: true,
-            isSuspended: false,
-            userId: req.cookies.userId,
-            roles: role
-        })
-        // if (req.file) {
-        //     newProduct.uploadDocuments = req.file.path; 
-        //   }
-        await newProduct.save();
-        return next(createSuccess(200, "Auction Created Successfully"))
+    const {
+      productName,
+      category,
+      color,
+      productCondition,
+      productDescription,
+      subcategory,
+      lotNumber,
+      brand,
+      startingPrice,
+      reservePrice,
+      saleTax,
+      startDate,
+      endDate,
+      buyerPremium,
+      shipping,
+      collect,
+      startTime,
+      stopTime,
+      address,
+      town,
+      country,
+      minimumIncrementAmount,
+      currentBid
+    } = req.body;
+    if (!req.files || req.files.length === 0) {
+      return next(createError(400, "No files uploaded"))
     }
-    catch (error) {
-        return next(createError(500, "Something went wrong"))
-    }
+
+    const uploadDocuments = req.files.map(file => {
+      const filename = Date.now() + path.extname(file.originalname);
+      const filepath = path.join(__dirname, '../uploads', filename);
+
+      fs.writeFileSync(filepath, file.buffer); // Save the file to the filesystem
+
+      return {
+        filename,
+        contentType: file.mimetype
+      };
+    });
+    const newProduct = new Product({
+      productName,
+      category,
+      color,
+      productCondition,
+      productDescription,
+      subcategory,
+      lotNumber,
+      brand,
+      startingPrice,
+      currentBid,
+      reservePrice,
+      saleTax,
+      startDate,
+      endDate,
+      buyerPremium,
+      shipping,
+      collect,
+      startTime,
+      stopTime,
+      address,
+      town,
+      country,
+      minimumIncrementAmount,
+      uploadDocuments,
+      proVerifyByAdmin: false,
+      isActive: true,
+      isSuspended: false,
+      userId: req.cookies.userId,
+      roles: role
+    })
+    // if (req.file) {
+    //     newProduct.uploadDocuments = req.file.path; 
+    //   }
+    await newProduct.save();
+    return next(createSuccess(200, "Auction Created Successfully"))
+  }
+  catch (error) {
+    return next(createError(500, "Something went wrong"))
+  }
 }
 //get All Auction
 const getAllAuction = async (req, res, next) => {
   try {
-      // Extract query parameters
-      const { page = 1, limit = 10, search = '' } = req.query;
-      
-      // Convert page and limit to numbers
-      const pageNumber = parseInt(page);
-      const limitNumber = parseInt(limit);
+    // Extract query parameters
+    const { page = 1, limit = 10, search = '' } = req.query;
 
-      // Build the search query
-      const searchQuery = search
-          ? { productName: { $regex: search, $options: 'i' } } // Case-insensitive search on productName
-          : {};
+    // Convert page and limit to numbers
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
 
-      // Find products with pagination and search
-      const products = await Product.find(searchQuery)
-          .skip((pageNumber - 1) * limitNumber)
-          .limit(limitNumber);
+    // Build the search query
+    const searchQuery = search
+      ? { productName: { $regex: search, $options: 'i' } } // Case-insensitive search on productName
+      : {};
 
-      // Get the total count of products for pagination
-      const totalProducts = await Product.countDocuments(searchQuery);
+    // Find products with pagination and search
+    const products = await Product.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
 
-      // Add URLs to the images
-      const proWithImageURLs = products.map((user) => {
-        // Map uploadDocuments to include URLs
-        const imagesWithURLs = user.uploadDocuments.map((image) => {
-          return {
-            ...image._doc,
-            url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
-          };
-        });
-  
-        // Map essentialDocs to include URLs
-        const essentialDocsWithURLs = user.essentialDocs ? user.essentialDocs.map((doc) => {
-          return {
-            ...doc._doc,
-            // url: `${req.protocol}://${req.get("host")}/api/product/essentialDocs/${doc.filename}`,
-            url: `http://51.21.113.68:3000/api/product/essentialDocs/${doc.filename}`,
-          };
-        }) : [];
-  
+    // Get the total count of products for pagination
+    const totalProducts = await Product.countDocuments(searchQuery);
+
+    // Add URLs to the images
+    const proWithImageURLs = products.map((user) => {
+      // Map uploadDocuments to include URLs
+      const imagesWithURLs = user.uploadDocuments.map((image) => {
         return {
-          ...user._doc,
-          uploadDocuments: imagesWithURLs,
-          essentialDocs: essentialDocsWithURLs, // Add essentialDocs with URLs
+          ...image._doc,
+          url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
         };
       });
 
-      // Respond with the paginated data
-      return next(createSuccess(200, "All Products", {
-          products: proWithImageURLs,
-          currentPage: pageNumber,
-          totalPages: Math.ceil(totalProducts / limitNumber),
-          totalProducts: totalProducts
-      }));
+      // Map essentialDocs to include URLs
+      const essentialDocsWithURLs = user.essentialDocs ? user.essentialDocs.map((doc) => {
+        return {
+          ...doc._doc,
+          // url: `${req.protocol}://${req.get("host")}/api/product/essentialDocs/${doc.filename}`,
+          url: `http://51.21.113.68:3000/api/product/essentialDocs/${doc.filename}`,
+        };
+      }) : [];
+
+      return {
+        ...user._doc,
+        uploadDocuments: imagesWithURLs,
+        essentialDocs: essentialDocsWithURLs, // Add essentialDocs with URLs
+      };
+    });
+
+    // Respond with the paginated data
+    return next(createSuccess(200, "All Products", {
+      products: proWithImageURLs,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalProducts / limitNumber),
+      totalProducts: totalProducts
+    }));
 
   } catch (error) {
-      return next(createError(500, "Internal Server Error!"));
+    return next(createError(500, "Internal Server Error!"));
   }
 }
 
@@ -380,17 +381,17 @@ const deleteAuction = async (req, res, next) => {
 };
 
 const getImage = (req, res, next) => {
-    const filepath = path.join(__dirname, '../uploads', req.params.filename);
-    fs.readFile(filepath, (err, data) => {
-      if (err) {
-        return next(createError(404, "Image Not Found"));
-      }
-      const image = data;
-      const mimeType = req.params.filename.split('.').pop();
-      res.setHeader('Content-Type', `image/${mimeType}`);
-      res.send(image);
-    });
-  };
+  const filepath = path.join(__dirname, '../uploads', req.params.filename);
+  fs.readFile(filepath, (err, data) => {
+    if (err) {
+      return next(createError(404, "Image Not Found"));
+    }
+    const image = data;
+    const mimeType = req.params.filename.split('.').pop();
+    res.setHeader('Content-Type', `image/${mimeType}`);
+    res.send(image);
+  });
+};
 //for documents
 const getDocs = (req, res, next) => {
   const filepath = path.join(__dirname, "../uploads", req.params.filename);
@@ -407,5 +408,5 @@ const getDocs = (req, res, next) => {
 
 
 module.exports = {
-    createProduct, getAllAuction, getAuction, updateAuction, deleteAuction, getProductsByUserId, getImage,getDocs
+  createProduct, getAllAuction, getAuction, updateAuction, deleteAuction, getProductsByUserId, getImage, getDocs
 }

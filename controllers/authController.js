@@ -227,7 +227,6 @@ if(!user){
     return next(createError(500, "Something went wrong"))
   }
   else{
-  console.log("Email sent successfully !!!");
   await newToken.save();
   return next(createSuccess(200, "Email Sent Successfully"))
   }

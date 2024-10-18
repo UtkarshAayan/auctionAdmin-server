@@ -61,7 +61,7 @@ const getAllSellers = async (req, res, next) => {
             ];
         }
 
-        const sellers = await User.find(query).skip(skip).limit(parseInt(limit)).exec();
+        const sellers = await User.find(query).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)).exec();
         const totalSellers = await User.countDocuments(query).exec();
         const totalPages = Math.ceil(totalSellers / limit);
 
@@ -93,7 +93,7 @@ const getAllBuyers = async (req, res, next) => {
             ];
         }
 
-        const buyers = await User.find(query).skip(skip).limit(parseInt(limit)).exec();
+        const buyers = await User.find(query).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)).exec();
         const totalBuyers = await User.countDocuments(query).exec();
         const totalPages = Math.ceil(totalBuyers / limit);
 
@@ -125,7 +125,7 @@ const getAllSubAdmins = async (req, res, next) => {
             ];
         }
 
-        const subAdmins = await User.find(query).skip(skip).limit(parseInt(limit)).exec();
+        const subAdmins = await User.find(query).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)).exec();
         const totalSubAdmins = await User.countDocuments(query).exec();
         const totalPages = Math.ceil(totalSubAdmins / limit);
 
@@ -212,7 +212,7 @@ const productVerificationEmail = async (userEmail) => {
             subject: 'Product Verified',
             text: 'Your Product has been verified successfully.'
         });
-        console.log('Email sent: ', info.response);
+ 
     } catch (error) {
         console.error('Error sending email: ', error);
     }
@@ -225,15 +225,15 @@ const verifyProductByAdmin = async (req, res) => {
         const productId = req.params.id;
             
         const product = await Product.findByIdAndUpdate(productId, { proVerifyByAdmin: true }, { new: true });
-        console.log(product)
+       
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
         const userId = product.userId
-        console.log(userId)
+  
         const user = await User.findById(userId);
  
-        console.log(user)
+   
         await productVerificationEmail(user.email);
         res.json({ message: 'Product verified successfully' });
     } catch (error) {

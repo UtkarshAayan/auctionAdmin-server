@@ -14,6 +14,7 @@ exports.getAllTransactions = async (req, res) => {
 
     // Fetch the transactions with pagination
     const transactions = await Transaction.find()
+      .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
 

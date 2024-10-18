@@ -3,8 +3,6 @@ const Category = require('../models/Category');
 exports.createCategory = async (req, res) => {
   try {
     // Log for debugging
-    console.log("Request Body:", req.body);
-    console.log("Files:", req.files);
 
     // Handle category image
     const categoryImage = req.files['categoryImage'] ? req.files['categoryImage'][0].filename : null;
@@ -82,8 +80,7 @@ exports.getCategories = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   try {
-    console.log("Request Body:", req.body);
-    console.log("Files:", req.files);
+
 
     // Find the existing category by ID
     const category = await Category.findById(req.params.id);

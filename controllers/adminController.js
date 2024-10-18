@@ -21,7 +21,7 @@ const productVerificationEmail = async (userEmail, lotNumber) => {
             subject: 'Product Verified',
             text: `Your Product has been verified successfully. Lot Number: ${lotNumber}`
         });
-        console.log('Email sent: ', info.response);
+      
     } catch (error) {
         console.error('Error sending email: ', error);
     }
@@ -99,7 +99,6 @@ const sendVerificationEmail = async (userEmail) => {
             subject: 'Account Verified',
             text: 'Your account has been verified successfully.'
         });
-        console.log('Email sent: ', info.response);
     } catch (error) {
         console.error('Error sending email: ', error);
     }
