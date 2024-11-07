@@ -1,5 +1,5 @@
 const Product = require('../models/sellerProductFormModel');
-const User = require('../models/userModel'); // Assuming you have a User model to get user details
+const User = require('../models/userModel'); 
 const Sequence = require('../models/lotSequenceModel');
 const nodemailer = require('nodemailer');
 
