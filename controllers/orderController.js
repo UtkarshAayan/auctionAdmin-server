@@ -150,7 +150,7 @@ exports.getOrderSummary = async (req, res, next) => {
     const imagesWithURLs = product.uploadDocuments.map((image) => {
       return {
         ...image._doc,
-        url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
+        url: `https://www.menaauctions.com/api/product/uploadDocuments/${image.filename}`,
       };
     });
 
@@ -229,7 +229,7 @@ exports.getAllOrders = async (req, res, next) => {
 
           const imagesWithURLs = product.uploadDocuments.map((image) => ({
             ...image._doc,
-            url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
+            url: `https://www.menaauctions.com/api/product/uploadDocuments/${image.filename}`,
           }));
 
           const productWithImageURLs = {

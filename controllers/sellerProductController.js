@@ -121,7 +121,7 @@ const getAllAuction = async (req, res, next) => {
       const imagesWithURLs = user.uploadDocuments.map((image) => {
         return {
           ...image._doc,
-          url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
+          url: `https://www.menaauctions.com/api/product/uploadDocuments/${image.filename}`,
         };
       });
 
@@ -130,7 +130,7 @@ const getAllAuction = async (req, res, next) => {
         return {
           ...doc._doc,
           // url: `${req.protocol}://${req.get("host")}/api/product/essentialDocs/${doc.filename}`,
-          url: `http://51.21.113.68:3000/api/product/essentialDocs/${doc.filename}`,
+          url: `https://www.menaauctions.com/api/product/essentialDocs/${doc.filename}`,
         };
       }) : [];
 
@@ -170,7 +170,7 @@ const getAuction = async (req, res, next) => {
     const imagesWithURLs = product.uploadDocuments.map((image) => {
       return {
         ...image._doc,
-        url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
+        url: `https://www.menaauctions.com/api/product/uploadDocuments/${image.filename}`,
       };
     });
 
@@ -178,7 +178,7 @@ const getAuction = async (req, res, next) => {
     const essentialDocsWithURLs = product.essentialDocs ? product.essentialDocs.map((doc) => {
       return {
         ...doc._doc,
-        url: `http://51.21.113.68:3000/api/product/essentialDocs/${doc.filename}`,
+        url: `https://www.menaauctions.com/api/product/essentialDocs/${doc.filename}`,
       };
     }) : [];
 
@@ -207,7 +207,7 @@ const getProductsByUserId = async (req, res, next) => {
       const imagesWithURLs = user.uploadDocuments.map((image) => {
         return {
           ...image._doc,
-          url: `http://51.21.113.68:3000/api/product/uploadDocuments/${image.filename}`,
+          url: `https://www.menaauctions.com/api/product/uploadDocuments/${image.filename}`,
         };
       });
 
@@ -215,7 +215,7 @@ const getProductsByUserId = async (req, res, next) => {
       const essentialDocsWithURLs = user.essentialDocs ? user.essentialDocs.map((doc) => {
         return {
           ...doc._doc,
-          url: `http://51.21.113.68:3000/api/product/essentialDocs/${doc.filename}`,
+          url: `https://www.menaauctions.com/api/product/essentialDocs/${doc.filename}`,
         };
       }) : [];
 
