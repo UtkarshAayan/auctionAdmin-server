@@ -198,7 +198,7 @@ if(!user){
     pass:"yver vjuu fvbb hcot"
    }
  });
- //const resetLink = `http://localhost:4200/reset/${token}`;
+ //const resetLink = `https://admin.menaauctions.com/reset/${token}`;
  let mailDetails={
   from: "ut.gupta29@gmail.com",
   subject: "Reset Password !",
