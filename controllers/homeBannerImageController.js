@@ -32,7 +32,7 @@ const uploadBanner = async (req, res) => {
 
       res.status(200).json({
           message: 'Banner images uploaded successfully',
-          bannerImages: banner.bannerImages.map(img => `http://88.222.212.120:3001${img}`)
+          bannerImages: banner.bannerImages.map(img => `https://admin.menaauctions.com${img}`)
       });
 
   } catch (error) {
@@ -53,7 +53,7 @@ const getBannerImages = async (req, res) => {
     res.status(200).json({
       bannerImages: banner.bannerImages.map(img => {
         // Ensure forward slashes for URLs
-        return `http://88.222.212.120:3001${img.replace(/\\/g, '/')}`;
+        return `https://admin.menaauctions.com${img.replace(/\\/g, '/')}`;
       })
     });
   };
